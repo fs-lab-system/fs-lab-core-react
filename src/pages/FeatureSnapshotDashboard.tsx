@@ -5,6 +5,7 @@ import { QueryState } from "../components/common/QueryState";
 
 import { FeatureSnapshotsTable } from "../components/tables/FeatureSnapshotsTable";
 import { LatencyChart } from "../components/charts/LatencyChart";
+import { useState } from "react";
 
 export function FeatureSnapshotsDashboard() {
   /*
@@ -23,6 +24,17 @@ export function FeatureSnapshotsDashboard() {
     queryFn: fetchFeatureSnapshots,
     staleTime: 5 * 60 * 1000 /* 5 min Chace */,
   });
+
+  const METRICS = [
+    { key: "p50_latency_s", label: "p50 Latency" },
+    { key: "p95_latency_s", label: "p95 Latency" },
+    { key: "p99_latency_s", label: "p99 Latency" },
+  ] as const;
+
+  /* SELECTION STATE */
+  const [selectedMetrics, setSelectedMetrics] = useState(
+    METRICS.map((metric) => metric.key),
+  );
 
   return (
     <div className="dashboard">
@@ -44,24 +56,48 @@ export function FeatureSnapshotsDashboard() {
       <section className="charts">
         <h3>Latency Overview</h3>
 
+        {/* SELECTION */}
+        <div className="chart-controls">
+          {METRICS.map((metric) => (
+            <label key={metric.key}>
+              <input
+                type="checkbox"
+                checked={selectedMetrics.includes(metric.key)}
+                onChange={() => {
+                  {
+                    /* prev = metric before change */
+                  }
+                  setSelectedMetrics((prev) => {
+                    const isSelected = prev.includes(metric.key);
+                    {
+                      /* if metric is selected remove, else add 
+                      remove: select all metrics except the filterd one */
+                    }
+                    if (isSelected) {
+                      return prev.filter((element) => element !== metric.key);
+                    } else {
+                      return [...prev, metric.key];
+                    }
+                  });
+                }}
+              />
+              {metric.label}
+            </label>
+          ))}
+        </div>
+
+        {/* DIAGRAMMS */}
         <QueryState isLoading={isLoading} error={error} data={data}>
-          <LatencyChart
-            data={data}
-            metric="p50_latency_s"
-            title="p50 Latency"
-          />
-
-          <LatencyChart
-            data={data}
-            metric="p95_latency_s"
-            title="p95 Latency"
-          />
-
-          <LatencyChart
-            data={data}
-            metric="p99_latency_s"
-            title="p99 Latency"
-          />
+          {METRICS.filter((metric) => selectedMetrics.includes(metric.key)).map(
+            (metric) => (
+              <LatencyChart
+                key={metric.key}
+                data={data}
+                metric={metric.key}
+                title={metric.label}
+              />
+            ),
+          )}
         </QueryState>
       </section>
     </div>
