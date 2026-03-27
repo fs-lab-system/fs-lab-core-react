@@ -7,6 +7,7 @@ export function Navigation() {
       <NavLink to="/feature-snapshot-dashboard">
         Feature Snapshots Dashboard
       </NavLink>
+      <NavLink to="/ai-analysis">AI Analysis</NavLink>
       <NavLink to="/small-experiments">Small Experiments</NavLink>
       <NavLink to="/about">About</NavLink>
     </nav>

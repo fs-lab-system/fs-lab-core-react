@@ -4,6 +4,7 @@ import { SmallExperiments } from "../pages/experiments/SmallExperiments";
 import { FeatureSnapshotsDashboard } from "../pages/FeatureSnapshotDashboard";
 import { NotFound } from "../pages/NotFound";
 import { About } from "../pages/About";
+import AIAnalysis from "../pages/AIAnalysis";
 
 export function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export function AppRouter() {
         path="/feature-snapshot-dashboard"
         element={<FeatureSnapshotsDashboard />}
       />
+      <Route path="/ai-analysis" element={<AIAnalysis />} />
       <Route path="/about" element={<About />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
